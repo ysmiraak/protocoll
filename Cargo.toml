@@ -1,0 +1,12 @@
+[package]
+name = "coll"
+version = "0.1.0"
+authors = ["ysmiraak <ysmiraak@gmail.com>"]
+description = "clojure inspired protocols for rust collections."
+documentation = "https://ysmiraak.github.io/protocoll/"
+homepage = "https://github.com/ysmiraak/protocoll"
+repository = "https://github.com/ysmiraak/protocoll"
+readme = "README.md"
+keywords = ["clojure","protocol","collection"]
+license = "MIT"
+include = ["src/**/*", "Cargo.toml"]
