@@ -1,10 +1,10 @@
 [package]
-name = "coll"
+name = "protocoll"
 version = "0.1.0"
 authors = ["ysmiraak <ysmiraak@gmail.com>"]
 description = "clojure inspired protocols for rust collections."
-documentation = "https://ysmiraak.github.io/protocoll/"
-homepage = "https://github.com/ysmiraak/protocoll"
+documentation = "https://ysmiraak.github.io/protocoll"
+homepage = "https://crates.io/crates/protocoll"
 repository = "https://github.com/ysmiraak/protocoll"
 readme = "README.md"
 keywords = ["clojure","protocol","collection"]
