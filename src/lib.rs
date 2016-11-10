@@ -1,8 +1,6 @@
 //! some basic protocols and implementations for rust collections. inspired by
 //! clojure's design, albeit not persistent.
 
-mod coll;
-pub use coll::Coll;
 mod map;
 pub use map::Map;
 mod set;
