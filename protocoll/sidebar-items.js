@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["Coll","basic protocol for collections."],["Map","basic protocol for maps."],["Seq","basic protocol for seqs."],["Set","basic protocol for sets."]]});
+initSidebarItems({"trait":[["Map","basic protocol for maps."],["Seq","basic protocol for seqs."],["Set","basic protocol for sets."]]});
