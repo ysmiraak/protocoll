@@ -8,5 +8,5 @@ inspired by clojure's design, albeit not persistent.
 
 ```
 [dependencies]
-protocoll = 0.1.2
+protocoll = 0.2.0
 ```

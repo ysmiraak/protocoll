@@ -13,22 +13,22 @@ pub trait Map<K,V> where Self:Sized {
     /// removes key `k`.
     fn dec<Q:?Sized>(self, k:&Q) -> Self where K:Borrow<Q>, Q:Hash+Ord;
 
+    /// pours another collection into this one.
+    fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = (K,V)>
+    { coll.into_iter().fold(self, Map::inc)}
+
+    /// `clear`.
+    fn zero(self) -> Self;
+
+    /// `shrink_to_fit`.
+    fn shrink(self) -> Self;
+
     /// like clojure's [update](http://clojuredocs.org/clojure.core/update).
     fn update<F>(self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V ;
 
     /// like clojure's [merge-with](http://clojuredocs.org/clojure.core/merge-with).
     fn merge<M,F>(self, other:M, mut f:F) -> Self where M:IntoIterator<Item = (K,V)>, F:FnMut(V,V) -> V
     { other.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |mu| match mu { Some(u) => f(u,v), None => v }))}
-
-    /// takes another collection into this one.
-    fn absorb<I>(self, coll:I) -> Self where I:IntoIterator<Item = (K,V)>
-    { coll.into_iter().fold(self, Map::inc)}
-
-    /// `shrink_to_fit`.
-    fn shrink(self) -> Self;
-
-    /// `clear`.
-    fn empty(self) -> Self;
 }
 
 impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
@@ -41,14 +41,14 @@ impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
     fn dec<Q:?Sized>(mut self, k:&Q) -> Self where K:Borrow<Q>, Q:Hash+Eq
     { self.remove(k); self }
 
-    fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
-    { let v = f(self.remove(&k)); Map::inc(self,(k,v))}
+    fn zero(mut self) -> Self
+    { self.clear(); self }
 
     fn shrink(mut self) -> Self
     { self.shrink_to_fit(); self }
 
-    fn empty(mut self) -> Self
-    { self.clear(); self }
+    fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
+    { let v = f(self.remove(&k)); Map::inc(self,(k,v))}
 }
 
 impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
@@ -61,12 +61,12 @@ impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
     fn dec<Q:?Sized>(mut self, k:&Q) -> Self where K:Borrow<Q>, Q:Ord
     { self.remove(k); self }
 
-    fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
-    { let v = f(self.remove(&k)); Map::inc(self,(k,v))}
+    fn zero(mut self) -> Self
+    { self.clear(); self }
 
     fn shrink(self) -> Self
     { self }
 
-    fn empty(mut self) -> Self
-    { self.clear(); self }
+    fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
+    { let v = f(self.remove(&k)); Map::inc(self,(k,v))}
 }

@@ -13,15 +13,15 @@ pub trait Set<T> where Self:Sized {
     /// removes item `i`.
     fn dec<Q:?Sized>(self, i:&Q) -> Self where T:Borrow<Q>, Q:Hash+Ord;
 
-    /// takes another collection into this one.
-    fn absorb<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
+    /// pours another collection into this one.
+    fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
     { coll.into_iter().fold(self, Set::inc)}
+
+    /// `clear`.
+    fn zero(self) -> Self;
 
     /// `shrink_to_fit`.
     fn shrink(self) -> Self;
-
-    /// `clear`.
-    fn empty(self) -> Self;
 }
 
 impl<T> Set<T> for HashSet<T> where T:Hash+Eq {
@@ -34,11 +34,11 @@ impl<T> Set<T> for HashSet<T> where T:Hash+Eq {
     fn dec<Q:?Sized>(mut self, i:&Q) -> Self where T:Borrow<Q>, Q:Hash+Eq
     { self.remove(i); self }
 
+    fn zero(mut self) -> Self
+    { self.clear(); self }
+
     fn shrink(mut self) -> Self
     { self.shrink_to_fit(); self }
-
-    fn empty(mut self) -> Self
-    { self.clear(); self }
 }
 
 impl<T> Set<T> for BTreeSet<T> where T:Ord {
@@ -51,9 +51,9 @@ impl<T> Set<T> for BTreeSet<T> where T:Ord {
     fn dec<Q:?Sized>(mut self, i:&Q) -> Self where T:Borrow<Q>, Q:Ord
     { self.remove(i); self }
 
+    fn zero(mut self) -> Self
+    { self.clear(); self }
+
     fn shrink(self) -> Self
     { self }
-
-    fn empty(mut self) -> Self
-    { self.clear(); self }
 }

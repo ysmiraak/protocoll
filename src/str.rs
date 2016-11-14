@@ -1,19 +1,19 @@
 /// basic protocol for strs;
 pub trait Str {
-    /// pushs `c`.
+    /// appends char `c`.
     fn inc(self, c:char) -> Self;
 
     /// pops the last char.
     fn dec(self) -> Self;
 
-    /// appends `s`.
-    fn absorb(self, s:&str) -> Self;
+    /// appends str `s`.
+    fn plus(self, s:&str) -> Self;
+
+    /// `clear`.
+    fn zero(self) -> Self;
 
     /// `shrink_to_fit`.
     fn shrink(self) -> Self;
-
-    /// `clear`.
-    fn empty(self) -> Self;
 }
 
 impl Str for String {
@@ -23,12 +23,12 @@ impl Str for String {
     fn dec(mut self) -> Self
     { self.pop(); self }
 
-    fn absorb(mut self, s:&str) -> Self
+    fn plus(mut self, s:&str) -> Self
     { self.push_str(s); self}
+
+    fn zero(mut self) -> Self
+    { self.clear(); self }
 
     fn shrink(mut self) -> Self
     { self.shrink_to_fit(); self }
-
-    fn empty(self) -> Self
-    { String::from("") }
 }

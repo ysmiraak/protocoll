@@ -12,15 +12,15 @@ pub trait Seq<T> where Self:Sized {
     /// for `BinaryHeap` it's the greatest one.
     fn dec(self) -> Self;
 
-    /// takes another collection into this one.
-    fn absorb<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
+    /// pours another collection into this one.
+    fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
     { coll.into_iter().fold(self, Seq::inc)}
+
+    /// `clear`.
+    fn zero(self) -> Self;
 
     /// `shrink_to_fit`.
     fn shrink(self) -> Self;
-
-    /// `clear`.
-    fn empty(self) -> Self;
 }
 
 impl<T> Seq<T> for Vec<T> {
@@ -33,11 +33,11 @@ impl<T> Seq<T> for Vec<T> {
     fn dec(mut self) -> Self
     { self.pop(); self }
 
+    fn zero(mut self) -> Self
+    { self.clear(); self }
+
     fn shrink(mut self) -> Self
     { self.shrink_to_fit(); self }
-
-    fn empty(mut self) -> Self
-    { self.clear(); self }
 }
 
 impl<T> Seq<T> for VecDeque<T> {
@@ -47,14 +47,14 @@ impl<T> Seq<T> for VecDeque<T> {
     fn inc(mut self, i:T) -> Self
     { self.push_back(i); self }
 
-    fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
-
-    fn empty(mut self) -> Self
-    { self.clear(); self }
-
     fn dec(mut self) -> Self
     { self.pop_front(); self }
+
+    fn zero(mut self) -> Self
+    { self.clear(); self }
+
+    fn shrink(mut self) -> Self
+    { self.shrink_to_fit(); self }
 }
 
 impl<T> Seq<T> for BinaryHeap<T> where T:Ord {
@@ -67,9 +67,9 @@ impl<T> Seq<T> for BinaryHeap<T> where T:Ord {
     fn dec(mut self) -> Self
     { self.pop(); self }
 
+    fn zero(mut self) -> Self
+    { self.clear(); self }
+
     fn shrink(mut self) -> Self
     { self.shrink_to_fit(); self }
-
-    fn empty(mut self) -> Self
-    { self.clear(); self }
 }
