@@ -132,15 +132,15 @@
     <span class='doccomment'>/// for `BinaryHeap` it&#39;s the greatest one.</span>
     <span class='kw'>fn</span> <span class='ident'>dec</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>;
 
-    <span class='doccomment'>/// takes another collection into this one.</span>
-    <span class='kw'>fn</span> <span class='ident'>absorb</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>coll</span>:<span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>T</span><span class='op'>&gt;</span>
+    <span class='doccomment'>/// pours another collection into this one.</span>
+    <span class='kw'>fn</span> <span class='ident'>plus</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='self'>self</span>, <span class='ident'>coll</span>:<span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>T</span><span class='op'>&gt;</span>
     { <span class='ident'>coll</span>.<span class='ident'>into_iter</span>().<span class='ident'>fold</span>(<span class='self'>self</span>, <span class='ident'>Seq</span>::<span class='ident'>inc</span>)}
+
+    <span class='doccomment'>/// `clear`.</span>
+    <span class='kw'>fn</span> <span class='ident'>zero</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>;
 
     <span class='doccomment'>/// `shrink_to_fit`.</span>
     <span class='kw'>fn</span> <span class='ident'>shrink</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>;
-
-    <span class='doccomment'>/// `clear`.</span>
-    <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>;
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Seq</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
@@ -153,11 +153,11 @@
     <span class='kw'>fn</span> <span class='ident'>dec</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>pop</span>(); <span class='self'>self</span> }
 
+    <span class='kw'>fn</span> <span class='ident'>zero</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
+    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
+
     <span class='kw'>fn</span> <span class='ident'>shrink</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>shrink_to_fit</span>(); <span class='self'>self</span> }
-
-    <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
-    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Seq</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>VecDeque</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
@@ -167,14 +167,14 @@
     <span class='kw'>fn</span> <span class='ident'>inc</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>i</span>:<span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>push_back</span>(<span class='ident'>i</span>); <span class='self'>self</span> }
 
-    <span class='kw'>fn</span> <span class='ident'>shrink</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
-    { <span class='self'>self</span>.<span class='ident'>shrink_to_fit</span>(); <span class='self'>self</span> }
-
-    <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
-    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
-
     <span class='kw'>fn</span> <span class='ident'>dec</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>pop_front</span>(); <span class='self'>self</span> }
+
+    <span class='kw'>fn</span> <span class='ident'>zero</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
+    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
+
+    <span class='kw'>fn</span> <span class='ident'>shrink</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
+    { <span class='self'>self</span>.<span class='ident'>shrink_to_fit</span>(); <span class='self'>self</span> }
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Seq</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>BinaryHeap</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>:<span class='ident'>Ord</span> {
@@ -187,11 +187,11 @@
     <span class='kw'>fn</span> <span class='ident'>dec</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>pop</span>(); <span class='self'>self</span> }
 
+    <span class='kw'>fn</span> <span class='ident'>zero</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
+    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
+
     <span class='kw'>fn</span> <span class='ident'>shrink</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
     { <span class='self'>self</span>.<span class='ident'>shrink_to_fit</span>(); <span class='self'>self</span> }
-
-    <span class='kw'>fn</span> <span class='ident'>empty</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span>
-    { <span class='self'>self</span>.<span class='ident'>clear</span>(); <span class='self'>self</span> }
 }
 </pre>
 </section>
