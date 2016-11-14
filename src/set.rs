@@ -1,6 +1,6 @@
-use std::hash::Hash;
-use std::borrow::Borrow;
 use std::collections::{HashSet,BTreeSet};
+use std::borrow::Borrow;
+use std::hash::Hash;
 
 /// basic protocol for sets.
 pub trait Set<T> where Self:Sized {
@@ -57,21 +57,3 @@ impl<T> Set<T> for BTreeSet<T> where T:Ord {
     fn empty(mut self) -> Self
     { self.clear(); self }
 }
-
-
-// fn main() {
-//     let s1 = (0..6).fold(HashSet::new(), Set::inc);
-//     let s2 = (3..9).fold(HashSet::new(), Set::inc);
-
-//     println!("{:?}",s1);
-//     println!("{:?}",s2);
-
-//     let s1 = Set::dec(s1,&0);
-//     println!("{:?}",s1);
-
-//     let s2f = s2.fun();
-
-//     for i in &s1 { println!("{:?}",s2f(i))}
-
-//     for i in s1.into_iter().filter_map(|i|s2f(&i)) { println!("{:?}",i)}
-// }

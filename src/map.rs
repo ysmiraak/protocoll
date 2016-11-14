@@ -1,6 +1,6 @@
-use std::hash::Hash;
-use std::borrow::Borrow;
 use std::collections::{HashMap,BTreeMap};
+use std::borrow::Borrow;
+use std::hash::Hash;
 
 /// basic protocol for maps.
 pub trait Map<K,V> where Self:Sized {
@@ -21,7 +21,7 @@ pub trait Map<K,V> where Self:Sized {
     { other.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |mu| match mu { Some(u) => f(u,v), None => v }))}
 
     /// takes another collection into this one.
-    fn absorb<I>(self, coll:I) -> Self where Self:Sized, I:IntoIterator<Item = (K,V)>
+    fn absorb<I>(self, coll:I) -> Self where I:IntoIterator<Item = (K,V)>
     { coll.into_iter().fold(self, Map::inc)}
 
     /// `shrink_to_fit`.
@@ -70,24 +70,3 @@ impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
     fn empty(mut self) -> Self
     { self.clear(); self }
 }
-
-
-// fn main(){
-//     let a1 = [1, 2, 3];
-//     let a2 = [4, 5, 6];
-//     let m1 = a1.iter().map(ToOwned::to_owned)
-//         .zip(a2.iter().map(ToOwned::to_owned))
-//         .fold(HashMap::new(), Map::inc);
-//     let m2 = a2.iter().map(ToOwned::to_owned)
-//         .zip(a1.iter().map(ToOwned::to_owned))
-//         .fold(HashMap::new(), Map::inc);
-
-//     println!("{:?}",m1);
-//     println!("{:?}",m2);
-//     let m1 = Map::update(m1, 0, &|_| 1);
-//     println!("{:?}",m1);
-//     println!("{:?}",m1.fun()(&0));
-//     println!("{:?}",m1.fun()(&3));
-
-//     println!("{:?}",m1.merge(m2,|_,_|0));
-// }
