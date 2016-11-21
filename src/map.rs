@@ -24,11 +24,33 @@ pub trait Map<K,V> where Self:Sized {
     fn shrink(self) -> Self;
 
     /// like clojure's [update](http://clojuredocs.org/clojure.core/update).
+    /// # example
+    /// ```
+    /// use protocoll::Map;
+    /// use std::collections::HashMap;
+    /// let m = [0,0,0,1,1,0,0,0].iter()
+    ///    .fold(HashMap::new(), |m,&k| Map::update
+    ///          (m,k, |opt_n| 1 + opt_n.unwrap_or(0)));
+    /// assert_eq!(6, m[&0]);
+    /// assert_eq!(2, m[&1]);
+    /// ```
     fn update<F>(self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V ;
 
     /// like clojure's [merge-with](http://clojuredocs.org/clojure.core/merge-with).
+    /// # example
+    /// ```
+    /// use protocoll::Map;
+    /// use std::collections::HashMap;
+    /// use std::ops::Add;
+    /// let m = [0,0,0,1,1,0,0,0].iter()
+    ///    .fold(HashMap::new(), |m,&k| Map::update
+    ///          (m,k, |opt_n| 1 + opt_n.unwrap_or(0)));
+    /// let m = Map::merge(m.clone(), m, usize::add);
+    /// assert_eq!(12, m[&0]);
+    /// assert_eq!(4, m[&1]);
+    /// ```
     fn merge<M,F>(self, other:M, mut f:F) -> Self where M:IntoIterator<Item = (K,V)>, F:FnMut(V,V) -> V
-    { other.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |mu| match mu { Some(u) => f(u,v), None => v }))}
+    { other.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |opt_u| match opt_u { Some(u) => f(u,v), None => v }))}
 }
 
 impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
