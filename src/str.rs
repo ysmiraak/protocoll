@@ -18,17 +18,17 @@ pub trait Str {
 
 impl Str for String {
     fn inc(mut self, c:char) -> Self
-    { self.push(c); self }
+    {self.push(c); self}
 
     fn dec(mut self) -> Self
-    { self.pop(); self }
+    {self.pop(); self}
 
     fn plus(mut self, s:&str) -> Self
-    { self.push_str(s); self}
+    {self.push_str(s); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
+    {self.shrink_to_fit(); self}
 }

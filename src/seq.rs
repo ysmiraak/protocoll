@@ -14,7 +14,7 @@ pub trait Seq<T> where Self:Sized {
 
     /// pours another collection into this one.
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
-    { coll.into_iter().fold(self, Seq::inc)}
+    {coll.into_iter().fold(self, Seq::inc)}
 
     /// `clear`.
     fn zero(self) -> Self;
@@ -25,51 +25,51 @@ pub trait Seq<T> where Self:Sized {
 
 impl<T> Seq<T> for Vec<T> {
     fn fun<'a>(&'a self) -> Box<Fn(usize) -> Option<&'a T> + 'a>
-    { Box::new(move |i| self.get(i))}
+    {Box::new(move |i| self.get(i))}
 
     fn inc(mut self, i:T) -> Self
-    { self.push(i); self }
+    {self.push(i); self}
 
     fn dec(mut self) -> Self
-    { self.pop(); self }
+    {self.pop(); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
+    {self.shrink_to_fit(); self}
 }
 
 impl<T> Seq<T> for VecDeque<T> {
     fn fun<'a>(&'a self) -> Box<Fn(usize) -> Option<&'a T> + 'a>
-    { Box::new(move |i| self.get(i))}
+    {Box::new(move |i| self.get(i))}
 
     fn inc(mut self, i:T) -> Self
-    { self.push_back(i); self }
+    {self.push_back(i); self}
 
     fn dec(mut self) -> Self
-    { self.pop_front(); self }
+    {self.pop_front(); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
+    {self.shrink_to_fit(); self}
 }
 
 impl<T> Seq<T> for BinaryHeap<T> where T:Ord {
     fn fun<'a>(&'a self) -> Box<Fn(usize) -> Option<&'a T> + 'a>
-    { Box::new(move |i| self.iter().skip(i).next())}
+    {Box::new(move |i| self.iter().skip(i).next())}
 
     fn inc(mut self, i:T) -> Self
-    { self.push(i); self }
+    {self.push(i); self}
 
     fn dec(mut self) -> Self
-    { self.pop(); self }
+    {self.pop(); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
+    {self.shrink_to_fit(); self}
 }

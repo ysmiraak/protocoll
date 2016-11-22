@@ -6,7 +6,4 @@ inspired by clojure's design, albeit not persistent.
 
 [api doc](https://ysmiraak.github.io/protocoll/)
 
-```
-[dependencies]
-protocoll = 0.2.0
-```
+[cargo crate](https://crates.io/crates/protocoll)

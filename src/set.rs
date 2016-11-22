@@ -15,7 +15,7 @@ pub trait Set<T> where Self:Sized {
 
     /// pours another collection into this one.
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
-    { coll.into_iter().fold(self, Set::inc)}
+    {coll.into_iter().fold(self, Set::inc)}
 
     /// `clear`.
     fn zero(self) -> Self;
@@ -26,34 +26,34 @@ pub trait Set<T> where Self:Sized {
 
 impl<T> Set<T> for HashSet<T> where T:Hash+Eq {
     fn fun<'a,Q:?Sized>(&'a self) -> Box<Fn(&Q) -> Option<&'a T> + 'a> where T:Borrow<Q>, Q:Hash+Eq
-    { Box::new(move |i| self.get(i))}
+    {Box::new(move |i| self.get(i))}
 
     fn inc(mut self, i:T) -> Self
-    { self.insert(i); self }
+    {self.insert(i); self}
 
     fn dec<Q:?Sized>(mut self, i:&Q) -> Self where T:Borrow<Q>, Q:Hash+Eq
-    { self.remove(i); self }
+    {self.remove(i); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(mut self) -> Self
-    { self.shrink_to_fit(); self }
+    {self.shrink_to_fit(); self}
 }
 
 impl<T> Set<T> for BTreeSet<T> where T:Ord {
     fn fun<'a,Q:?Sized>(&'a self) -> Box<Fn(&Q) -> Option<&'a T> + 'a> where T:Borrow<Q>, Q:Ord
-    { Box::new(move |i| self.get(i))}
+    {Box::new(move |i| self.get(i))}
 
     fn inc(mut self, i:T) -> Self
-    { self.insert(i); self }
+    {self.insert(i); self}
 
     fn dec<Q:?Sized>(mut self, i:&Q) -> Self where T:Borrow<Q>, Q:Ord
-    { self.remove(i); self }
+    {self.remove(i); self}
 
     fn zero(mut self) -> Self
-    { self.clear(); self }
+    {self.clear(); self}
 
     fn shrink(self) -> Self
-    { self }
+    {self}
 }
