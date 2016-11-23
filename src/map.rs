@@ -52,7 +52,7 @@ pub trait Map<K,V> where Self:Sized {
     fn merge<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(V,V) -> V
     {coll.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |opt_u| match opt_u {Some(u) => f(u,v), None => v }))}
 
-    /// like `Map::update` but more efficient.
+    /// like `Map::update` but can be more efficient.
     /// # example
     /// ```
     /// use protocoll::Map;
