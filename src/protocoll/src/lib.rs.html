@@ -61,6 +61,10 @@
 <span id="17">17</span>
 <span id="18">18</span>
 <span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
 </pre><pre class='rust '>
 <span class='doccomment'>//! some basic protocols and implementations for rust collections. inspired by</span>
 <span class='doccomment'>//! clojure&#39;s design, albeit not persistent.</span>
@@ -70,11 +74,15 @@
 
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>_map</span>::<span class='ident'>Map</span>;
 <span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>map</span> {
-    <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>vec_sorted_map</span>::<span class='ident'>VecSortedMap</span>; 
+    <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>vec_sorted_map</span>::<span class='ident'>VecSortedMap</span>;
 }
 
 <span class='kw'>mod</span> <span class='ident'>_set</span>;
+<span class='kw'>mod</span> <span class='ident'>vec_sorted_set</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>_set</span>::<span class='ident'>Set</span>;
+<span class='kw'>pub</span> <span class='kw'>mod</span> <span class='ident'>set</span> {
+    <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>vec_sorted_set</span>::<span class='ident'>VecSortedSet</span>;
+}
 
 <span class='kw'>mod</span> <span class='ident'>_seq</span>;
 <span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>_seq</span>::<span class='ident'>Seq</span>;

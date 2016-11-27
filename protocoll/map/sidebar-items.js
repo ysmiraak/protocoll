@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["VecSortedMap","an array-map sorted by key. does not support `entry`; see `Map::update`. `Map::update_in_place` is **not** much more efficient than `update` for this data structure."]]});
+initSidebarItems({"struct":[["VecSortedMap","an array-map sorted by key. does not support `entry`; see `Map::update` for the same functionality. `Map::update_in_place` is **not** much more efficient than `update` for this data structure."]]});

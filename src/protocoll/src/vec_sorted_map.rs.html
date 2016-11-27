@@ -229,13 +229,15 @@
 <span id="185">185</span>
 <span id="186">186</span>
 <span id="187">187</span>
+<span id="188">188</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>_map</span>::<span class='ident'>Map</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Borrow</span>;
 
 <span class='doccomment'>/// an array-map sorted by key. does not support `entry`; see</span>
-<span class='doccomment'>/// [`Map::update`](#method.update). [`Map::update_in_place`](#method.update_in_place)</span>
-<span class='doccomment'>/// is **not** much more efficient than `update` for this data structure.</span>
+<span class='doccomment'>/// [`Map::update`](#method.update) for the same</span>
+<span class='doccomment'>/// functionality. [`Map::update_in_place`](#method.update_in_place) is **not**</span>
+<span class='doccomment'>/// much more efficient than `update` for this data structure.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Default</span>,<span class='ident'>Clone</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Eq</span>,<span class='ident'>PartialOrd</span>,<span class='ident'>Ord</span>,<span class='ident'>Hash</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span>(<span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>);
 
@@ -325,9 +327,9 @@
 
     <span class='doccomment'>/// this makes up for the (intentional) absence of `iter_mut`.</span>
     <span class='doccomment'>/// # example</span>
-    <span class='doccomment'>/// ```    </span>
+    <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// // a somewhat unecessary way to create a mapping from square numbers to</span>
-    <span class='doccomment'>/// // the fibonacci sequence.</span>
+    <span class='doccomment'>/// // fibonacci numbers.</span>
     <span class='doccomment'>/// use protocoll::map::VecSortedMap;</span>
     <span class='doccomment'>/// let m:VecSortedMap&lt;u32,u32&gt; =</span>
     <span class='doccomment'>///     (0..).map(|n| (n * n, 0))</span>
@@ -345,7 +347,7 @@
     <span class='doccomment'>/// assert_eq!(m[&amp;  25], 5);</span>
     <span class='doccomment'>/// assert_eq!(m[&amp;  36], 8);</span>
     <span class='doccomment'>/// assert_eq!(m[&amp; 144], 144);</span>
-    <span class='doccomment'>/// ```    </span>
+    <span class='doccomment'>/// ```</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>update_all_in_place</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='kw-2'>mut</span> <span class='ident'>f</span>:<span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> <span class='kw'>where</span> <span class='ident'>F</span>:<span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='ident'>K</span>,<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>V</span>)
     {<span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> (<span class='kw-2'>ref</span> <span class='ident'>k</span>, <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>v</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='number'>0</span> {<span class='ident'>f</span>(<span class='ident'>k</span>,<span class='ident'>v</span>)} <span class='self'>self</span>}
 }
@@ -360,7 +362,7 @@
  <span class='kw'>fn</span> <span class='ident'>into_iter</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Iter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span> {<span class='self'>self</span>.<span class='ident'>iter</span>()}}
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>Extend</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>K</span>:<span class='ident'>Ord</span>
-{<span class='kw'>fn</span> <span class='ident'>extend</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>iter</span>:<span class='ident'>I</span>) <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> (<span class='ident'>K</span>, <span class='ident'>V</span>)<span class='op'>&gt;</span>
+{<span class='kw'>fn</span> <span class='ident'>extend</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>iter</span>:<span class='ident'>I</span>) <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> (<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>
  {<span class='kw'>for</span> (<span class='ident'>k</span>,<span class='ident'>v</span>) <span class='kw'>in</span> <span class='ident'>iter</span> {<span class='self'>self</span>.<span class='ident'>insert</span>(<span class='ident'>k</span>,<span class='ident'>v</span>);}}}
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>,<span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>Extend</span><span class='op'>&lt;</span>(<span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>K</span>, <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>V</span>)<span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>K</span>:<span class='ident'>Ord</span><span class='op'>+</span><span class='ident'>Copy</span>, <span class='ident'>V</span>:<span class='ident'>Copy</span>
@@ -369,7 +371,7 @@
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>iter</span>::<span class='ident'>FromIterator</span>;
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='ident'>FromIterator</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>K</span>:<span class='ident'>Ord</span>
-{<span class='kw'>fn</span> <span class='ident'>from_iter</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='ident'>iter</span>:<span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> (<span class='ident'>K</span>, <span class='ident'>V</span>)<span class='op'>&gt;</span>
+{<span class='kw'>fn</span> <span class='ident'>from_iter</span><span class='op'>&lt;</span><span class='ident'>I</span><span class='op'>&gt;</span>(<span class='ident'>iter</span>:<span class='ident'>I</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>I</span>:<span class='ident'>IntoIterator</span><span class='op'>&lt;</span><span class='ident'>Item</span> <span class='op'>=</span> (<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>
  {<span class='ident'>Map</span>::<span class='ident'>plus</span>(<span class='ident'>VecSortedMap</span>::<span class='ident'>new</span>(),<span class='ident'>iter</span>)}}
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::<span class='ident'>Index</span>;
