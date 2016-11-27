@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/YK/Documents/5.info_retrieval/protocoll/src/lib.rs`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang">
+    <meta name="description" content="API documentation for the Rust `map` mod in crate `protocoll`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, map">
 
-    <title>lib.rs.html -- source</title>
+    <title>protocoll::map - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        
+        <p class='location'><a href='../index.html'>protocoll</a></p><script>window.sidebarCurrent = {name: 'map', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,31 +42,23 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1"> 1</span>
-<span id="2"> 2</span>
-<span id="3"> 3</span>
-<span id="4"> 4</span>
-<span id="5"> 5</span>
-<span id="6"> 6</span>
-<span id="7"> 7</span>
-<span id="8"> 8</span>
-<span id="9"> 9</span>
-<span id="10">10</span>
-<span id="11">11</span>
-</pre><pre class='rust '>
-<span class='doccomment'>//! some basic protocols and implementations for rust collections. inspired by</span>
-<span class='doccomment'>//! clojure&#39;s design, albeit not persistent.</span>
-
-<span class='kw'>mod</span> <span class='ident'>map</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>map</span>::<span class='ident'>Map</span> <span class='kw'>as</span> <span class='ident'>Map</span>;
-<span class='kw'>mod</span> <span class='ident'>set</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>set</span>::<span class='ident'>Set</span> <span class='kw'>as</span> <span class='ident'>Set</span>;
-<span class='kw'>mod</span> <span class='ident'>seq</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>seq</span>::<span class='ident'>Seq</span> <span class='kw'>as</span> <span class='ident'>Seq</span>;
-<span class='kw'>mod</span> <span class='ident'>str</span>;
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>str</span>::<span class='ident'>Str</span> <span class='kw'>as</span> <span class='ident'>Str</span>;
-</pre>
-</section>
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>protocoll</a>::<wbr><a class='mod' href=''>map</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-352' class='srclink' href='../../src/protocoll/src/lib.rs.html#8-10' title='goto source code'>[src]</a></span></h1>
+<h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.VecSortedMap.html'
+                                  title='protocoll::map::VecSortedMap'>VecSortedMap</a></td>
+                           <td class='docblock-short'>
+                                <p>an array-map sorted by key. does not support <code>entry</code>; see
+<a href="#method.update"><code>Map::update</code></a>. <a href="#method.update_in_place"><code>Map::update_in_place</code></a>
+is <strong>not</strong> much more efficient than <code>update</code> for this data structure.</p>
+                           </td>
+                       </tr></table></section>
     <section id='search' class="content hidden"></section>
 
     <section class="footer"></section>
