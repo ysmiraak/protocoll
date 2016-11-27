@@ -1,11 +1,19 @@
 //! some basic protocols and implementations for rust collections. inspired by
 //! clojure's design, albeit not persistent.
 
-mod map;
-pub use map::Map as Map;
-mod set;
-pub use set::Set as Set;
-mod seq;
-pub use seq::Seq as Seq;
-mod str;
-pub use str::Str as Str;
+mod _map;
+mod vec_sorted_map;
+
+pub use _map::Map;
+pub mod map {
+    pub use vec_sorted_map::VecSortedMap; 
+}
+
+mod _set;
+pub use _set::Set;
+
+mod _seq;
+pub use _seq::Seq;
+
+mod _str;
+pub use _str::Str;
