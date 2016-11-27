@@ -2,8 +2,9 @@ use _map::Map;
 use std::borrow::Borrow;
 
 /// an array-map sorted by key. does not support `entry`; see
-/// [`Map::update`](#method.update). [`Map::update_in_place`](#method.update_in_place)
-/// is **not** much more efficient than `update` for this data structure.
+/// [`Map::update`](#method.update) for the same
+/// functionality. [`Map::update_in_place`](#method.update_in_place) is **not**
+/// much more efficient than `update` for this data structure.
 #[derive(Default,Clone,PartialEq,Eq,PartialOrd,Ord,Hash)]
 pub struct VecSortedMap<K,V>(Vec<(K,V)>);
 
@@ -93,9 +94,9 @@ impl<K,V> VecSortedMap<K,V> {
 
     /// this makes up for the (intentional) absence of `iter_mut`.
     /// # example
-    /// ```    
+    /// ```
     /// // a somewhat unecessary way to create a mapping from square numbers to
-    /// // the fibonacci sequence.
+    /// // fibonacci numbers.
     /// use protocoll::map::VecSortedMap;
     /// let m:VecSortedMap<u32,u32> =
     ///     (0..).map(|n| (n * n, 0))
@@ -113,7 +114,7 @@ impl<K,V> VecSortedMap<K,V> {
     /// assert_eq!(m[&  25], 5);
     /// assert_eq!(m[&  36], 8);
     /// assert_eq!(m[& 144], 144);
-    /// ```    
+    /// ```
     pub fn update_all_in_place<F>(mut self, mut f:F) -> Self where F:FnMut(&K,&mut V)
     {for &mut (ref k, ref mut v) in &mut self.0 {f(k,v)} self}
 }
@@ -128,7 +129,7 @@ impl<'a,K:'a,V:'a> IntoIterator for &'a VecSortedMap<K,V>
  fn into_iter(self) -> Iter<'a,(K,V)> {self.iter()}}
 
 impl<K,V> Extend<(K,V)> for VecSortedMap<K,V> where K:Ord
-{fn extend<I>(&mut self, iter:I) where I:IntoIterator<Item = (K, V)>
+{fn extend<I>(&mut self, iter:I) where I:IntoIterator<Item = (K,V)>
  {for (k,v) in iter {self.insert(k,v);}}}
 
 impl<'a,K,V> Extend<(&'a K, &'a V)> for VecSortedMap<K,V> where K:Ord+Copy, V:Copy
@@ -137,7 +138,7 @@ impl<'a,K,V> Extend<(&'a K, &'a V)> for VecSortedMap<K,V> where K:Ord+Copy, V:Co
 
 use std::iter::FromIterator;
 impl<K,V> FromIterator<(K,V)> for VecSortedMap<K,V> where K:Ord
-{fn from_iter<I>(iter:I) -> VecSortedMap<K,V> where I:IntoIterator<Item = (K, V)>
+{fn from_iter<I>(iter:I) -> VecSortedMap<K,V> where I:IntoIterator<Item = (K,V)>
  {Map::plus(VecSortedMap::new(),iter)}}
 
 use std::ops::Index;
