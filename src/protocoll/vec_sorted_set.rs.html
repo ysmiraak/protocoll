@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/vec_sorted_set.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/YK/Documents/5.info_retrieval/protocoll/src/vec_sorted_set.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>vec_sorted_set.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
     
 
     
@@ -311,6 +311,10 @@
 <span id="267">267</span>
 <span id="268">268</span>
 <span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>_set</span>::<span class='ident'>Set</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Borrow</span>;
@@ -450,7 +454,8 @@
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>BitOr</span><span class='op'>&lt;</span><span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>:<span class='ident'>Ord</span> {
     <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
-    <span class='doccomment'>/// union</span>
+    <span class='doccomment'>/// union.</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
@@ -485,7 +490,8 @@
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>BitAnd</span><span class='op'>&lt;</span><span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>:<span class='ident'>Ord</span> {
     <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
-    <span class='doccomment'>/// intersection</span>
+    <span class='doccomment'>/// intersection.</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
@@ -516,7 +522,8 @@
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>BitXor</span><span class='op'>&lt;</span><span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>:<span class='ident'>Ord</span> {
     <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
-    <span class='doccomment'>/// symmetric difference</span>
+    <span class='doccomment'>/// symmetric difference.</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
@@ -551,7 +558,8 @@
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>Sub</span><span class='op'>&lt;</span><span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;&gt;</span> <span class='kw'>for</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>:<span class='ident'>Ord</span> {
     <span class='kw'>type</span> <span class='ident'>Output</span> <span class='op'>=</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>;
-    <span class='doccomment'>/// difference</span>
+    <span class='doccomment'>/// difference.</span>
+    <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
@@ -636,11 +644,11 @@
     
 
     <script>
-        window.rootPath = "../../../";
+        window.rootPath = "../../";
         window.currentCrate = "protocoll";
     </script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../main.js"></script>
-    <script defer src="../../../search-index.js"></script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>

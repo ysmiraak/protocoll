@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `src/vec_sorted_map.rs`.">
+    <meta name="description" content="Source to the Rust file `/Users/YK/Documents/5.info_retrieval/protocoll/src/vec_sorted_map.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>vec_sorted_map.rs.html -- source</title>
 
-    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
-    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
     
 
     
@@ -236,10 +236,11 @@
 <span class='kw'>use</span> <span class='ident'>_map</span>::<span class='ident'>Map</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Borrow</span>;
 
-<span class='doccomment'>/// an array-map sorted by key. does not support `entry`; see</span>
-<span class='doccomment'>/// [`Map::update`](#method.update) for the same</span>
-<span class='doccomment'>/// functionality. [`Map::update_in_place`](#method.update_in_place) is **not**</span>
-<span class='doccomment'>/// much more efficient than `update` for this data structure.</span>
+<span class='doccomment'>/// an array-map sorted by key.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// does not support `entry`; see [`Map::update`](#method.update) for the same</span>
+<span class='doccomment'>/// functionality. [`Map::update_mut`](#method.update_mut) is **not** much more</span>
+<span class='doccomment'>/// efficient than `update` for this data structure.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Default</span>,<span class='ident'>Clone</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Eq</span>,<span class='ident'>PartialOrd</span>,<span class='ident'>Ord</span>,<span class='ident'>Hash</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span>(<span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>);
 
@@ -330,7 +331,6 @@
     <span class='doccomment'>/// this makes up for the (intended) absence of `iter_mut`.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
-    <span class='doccomment'>///</span>
     <span class='doccomment'>/// ```</span>
     <span class='doccomment'>/// // a somewhat unecessary way to create a mapping from square numbers to</span>
     <span class='doccomment'>/// // fibonacci numbers.</span>
@@ -478,11 +478,11 @@
     
 
     <script>
-        window.rootPath = "../../../";
+        window.rootPath = "../../";
         window.currentCrate = "protocoll";
     </script>
-    <script src="../../../jquery.js"></script>
-    <script src="../../../main.js"></script>
-    <script defer src="../../../search-index.js"></script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
 </body>
 </html>
