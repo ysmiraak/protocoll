@@ -84,7 +84,7 @@ pub trait Map<K,V> where Self:Sized {
 }
 
 pub trait MapMut<K,V> {
-    /// like [`Map::update`](#method.update) but can be more efficient.
+    /// like [`Map::update`](trait.Map.html#tymethod.update) but can be more efficient.
     ///
     /// # example
     /// ```
@@ -101,7 +101,7 @@ pub trait MapMut<K,V> {
     /// ```
     fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V);
 
-    /// like [`Map::update_all`](#method.update_all) but can be more efficient.
+    /// like [`Map::update_all`](trait.Map.html#method.update_all) but can be more efficient.
     ///
     /// # example
     /// ```
@@ -116,7 +116,7 @@ pub trait MapMut<K,V> {
     /// ```
     fn update_all_mut<F>(&mut self, f:F) where F:FnMut(&K, &mut V);
 
-    /// like [`Map::merge`](#method.merge) but can be more efficient.
+    /// like [`Map::merge`](trait.Map.html#method.merge) but can be more efficient.
     ///
     /// # example
     /// ```

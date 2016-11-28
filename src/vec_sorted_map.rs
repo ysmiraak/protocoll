@@ -4,8 +4,8 @@ use std::borrow::Borrow;
 /// an array-map sorted by key.
 ///
 /// does not support `entry`; see [`Map::update`](#method.update) for the same
-/// functionality. [`Map::update_mut`](#method.update_mut) is **not** much more
-/// efficient than `update` for this data structure.
+/// functionality. [`MapMut`](../trait.MapMut.html) functions are **not** much more
+/// efficient than [`Map`](../trait.Map.html) for this data structure.
 #[derive(Default,Clone,PartialEq,Eq,PartialOrd,Ord,Hash)]
 pub struct VecSortedMap<K,V>(Vec<(K,V)>);
 
@@ -82,7 +82,7 @@ impl<K,V> VecSortedMap<K,V> {
 
     /// iterate over the underlying vec. note: iterator element type is **not**
     /// `(&K,&V)` but rather `&(K,V)`. `iter_mut` is not supported for this
-    /// collection. see [`update_all_in_place`](#method.update_all_in_place) for
+    /// collection. see [`update_all_mut`](#method.update_all_mut) for
     /// the same functionality.
     pub fn iter(&self) -> Iter<(K,V)>
     {self.0.iter()}
@@ -92,33 +92,6 @@ impl<K,V> VecSortedMap<K,V> {
 
     pub fn is_empty(&self) -> bool
     {self.0.is_empty()}
-
-    /// this makes up for the (intended) absence of `iter_mut`.
-    ///
-    /// # example
-    /// ```
-    /// // a somewhat unecessary way to create a mapping from square numbers to
-    /// // fibonacci numbers.
-    /// use protocoll::map::VecSortedMap;
-    /// let m:VecSortedMap<u32,u32> =
-    ///     (0..).map(|n| (n * n, 0))
-    ///     .take(13).collect();
-    /// let (ref mut a, ref mut b) = (0,1);
-    /// let m = m.update_all_in_place
-    ///     (|_,v| {*v = *a;
-    ///             *a = *b;
-    ///             *b += *v});
-    /// assert_eq!(m[&   0], 0);
-    /// assert_eq!(m[&   1], 1);
-    /// assert_eq!(m[&   4], 1);
-    /// assert_eq!(m[&   9], 2);
-    /// assert_eq!(m[&  16], 3);
-    /// assert_eq!(m[&  25], 5);
-    /// assert_eq!(m[&  36], 8);
-    /// assert_eq!(m[& 144], 144);
-    /// ```
-    pub fn update_all_in_place<F>(mut self, mut f:F) -> Self where F:FnMut(&K,&mut V)
-    {for &mut (ref k, ref mut v) in &mut self.0 {f(k,v)} self}
 }
 
 use std::vec::IntoIter;
@@ -187,6 +160,31 @@ impl<K,V> MapMut<K,V> for VecSortedMap<K,V> where K:Ord {
     {match self.0.binary_search_by(|&(ref q, _)| q.borrow().cmp(&k))
      {Ok(i) => f(&mut self.0[i].1), Err(i) => {f(&mut fnil); self.0.insert(i,(k,fnil))}}}
 
+    /// this makes up for the (intended) absence of `iter_mut`.
+    ///
+    /// # example
+    /// ```
+    /// // a somewhat unecessary way to create a mapping from square numbers to
+    /// // fibonacci numbers.
+    /// use protocoll::map::VecSortedMap;
+    /// use protocoll::MapMut;
+    /// let mut m:VecSortedMap<u32,u32> =
+    ///     (0..).map(|n| (n * n, 0))
+    ///     .take(13).collect();
+    /// let (ref mut a, ref mut b) = (0,1);
+    /// m.update_all_mut
+    ///     (|_,v| {*v = *a;
+    ///             *a = *b;
+    ///             *b += *v});
+    /// assert_eq!(m[&   0], 0);
+    /// assert_eq!(m[&   1], 1);
+    /// assert_eq!(m[&   4], 1);
+    /// assert_eq!(m[&   9], 2);
+    /// assert_eq!(m[&  16], 3);
+    /// assert_eq!(m[&  25], 5);
+    /// assert_eq!(m[&  36], 8);
+    /// assert_eq!(m[& 144], 144);
+    /// ```
     fn update_all_mut<F>(&mut self, mut f:F) where F:FnMut(&K, &mut V)
     {for &mut (ref k, ref mut v) in &mut self.0 {f(k,v)}}
     
