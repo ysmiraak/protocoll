@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/YK/Documents/5.info_retrieval/protocoll/src/vec_sorted_map.rs`.">
+    <meta name="description" content="Source to the Rust file `vec_sorted_map.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>vec_sorted_map.rs.html -- source</title>
@@ -238,8 +238,6 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>_map</span>::{<span class='ident'>Map</span>,<span class='ident'>MapMut</span>};
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>Borrow</span>;
@@ -247,8 +245,8 @@
 <span class='doccomment'>/// an array-map sorted by key.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// does not support `entry`; see [`Map::update`](#method.update) for the same</span>
-<span class='doccomment'>/// functionality. [`Map::update_mut`](#method.update_mut) is **not** much more</span>
-<span class='doccomment'>/// efficient than `update` for this data structure.</span>
+<span class='doccomment'>/// functionality. [`MapMut`](trait.MapMut.html) functions are **not** much more</span>
+<span class='doccomment'>/// efficient than [`Map`](trait.Map.html) for this data structure.</span>
 <span class='attribute'>#[<span class='ident'>derive</span>(<span class='ident'>Default</span>,<span class='ident'>Clone</span>,<span class='ident'>PartialEq</span>,<span class='ident'>Eq</span>,<span class='ident'>PartialOrd</span>,<span class='ident'>Ord</span>,<span class='ident'>Hash</span>)]</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VecSortedMap</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span>(<span class='ident'>Vec</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>);
 
@@ -325,7 +323,7 @@
 
     <span class='doccomment'>/// iterate over the underlying vec. note: iterator element type is **not**</span>
     <span class='doccomment'>/// `(&amp;K,&amp;V)` but rather `&amp;(K,V)`. `iter_mut` is not supported for this</span>
-    <span class='doccomment'>/// collection. see [`update_all_in_place`](#method.update_all_in_place) for</span>
+    <span class='doccomment'>/// collection. see [`update_all_mut`](#method.update_all_mut) for</span>
     <span class='doccomment'>/// the same functionality.</span>
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>iter</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Iter</span><span class='op'>&lt;</span>(<span class='ident'>K</span>,<span class='ident'>V</span>)<span class='op'>&gt;</span>
     {<span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>iter</span>()}
@@ -335,33 +333,6 @@
 
     <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>is_empty</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span>
     {<span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>is_empty</span>()}
-
-    <span class='doccomment'>/// this makes up for the (intended) absence of `iter_mut`.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// # example</span>
-    <span class='doccomment'>/// ```</span>
-    <span class='doccomment'>/// // a somewhat unecessary way to create a mapping from square numbers to</span>
-    <span class='doccomment'>/// // fibonacci numbers.</span>
-    <span class='doccomment'>/// use protocoll::map::VecSortedMap;</span>
-    <span class='doccomment'>/// let m:VecSortedMap&lt;u32,u32&gt; =</span>
-    <span class='doccomment'>///     (0..).map(|n| (n * n, 0))</span>
-    <span class='doccomment'>///     .take(13).collect();</span>
-    <span class='doccomment'>/// let (ref mut a, ref mut b) = (0,1);</span>
-    <span class='doccomment'>/// let m = m.update_all_in_place</span>
-    <span class='doccomment'>///     (|_,v| {*v = *a;</span>
-    <span class='doccomment'>///             *a = *b;</span>
-    <span class='doccomment'>///             *b += *v});</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;   0], 0);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;   1], 1);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;   4], 1);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;   9], 2);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;  16], 3);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;  25], 5);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp;  36], 8);</span>
-    <span class='doccomment'>/// assert_eq!(m[&amp; 144], 144);</span>
-    <span class='doccomment'>/// ```</span>
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>update_all_in_place</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='kw-2'>mut</span> <span class='ident'>f</span>:<span class='ident'>F</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> <span class='kw'>where</span> <span class='ident'>F</span>:<span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='ident'>K</span>,<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>V</span>)
-    {<span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> (<span class='kw-2'>ref</span> <span class='ident'>k</span>, <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>v</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='number'>0</span> {<span class='ident'>f</span>(<span class='ident'>k</span>,<span class='ident'>v</span>)} <span class='self'>self</span>}
 }
 
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>vec</span>::<span class='ident'>IntoIter</span>;
@@ -430,6 +401,31 @@
     {<span class='kw'>match</span> <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>binary_search_by</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span>(<span class='kw-2'>ref</span> <span class='ident'>q</span>, _)<span class='op'>|</span> <span class='ident'>q</span>.<span class='ident'>borrow</span>().<span class='ident'>cmp</span>(<span class='kw-2'>&amp;</span><span class='ident'>k</span>))
      {<span class='prelude-val'>Ok</span>(<span class='ident'>i</span>) <span class='op'>=&gt;</span> <span class='ident'>f</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='number'>0</span>[<span class='ident'>i</span>].<span class='number'>1</span>), <span class='prelude-val'>Err</span>(<span class='ident'>i</span>) <span class='op'>=&gt;</span> {<span class='ident'>f</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fnil</span>); <span class='self'>self</span>.<span class='number'>0</span>.<span class='ident'>insert</span>(<span class='ident'>i</span>,(<span class='ident'>k</span>,<span class='ident'>fnil</span>))}}}
 
+    <span class='doccomment'>/// this makes up for the (intended) absence of `iter_mut`.</span>
+    <span class='doccomment'>///</span>
+    <span class='doccomment'>/// # example</span>
+    <span class='doccomment'>/// ```</span>
+    <span class='doccomment'>/// // a somewhat unecessary way to create a mapping from square numbers to</span>
+    <span class='doccomment'>/// // fibonacci numbers.</span>
+    <span class='doccomment'>/// use protocoll::map::VecSortedMap;</span>
+    <span class='doccomment'>/// use protocoll::MapMut;</span>
+    <span class='doccomment'>/// let mut m:VecSortedMap&lt;u32,u32&gt; =</span>
+    <span class='doccomment'>///     (0..).map(|n| (n * n, 0))</span>
+    <span class='doccomment'>///     .take(13).collect();</span>
+    <span class='doccomment'>/// let (ref mut a, ref mut b) = (0,1);</span>
+    <span class='doccomment'>/// m.update_all_mut</span>
+    <span class='doccomment'>///     (|_,v| {*v = *a;</span>
+    <span class='doccomment'>///             *a = *b;</span>
+    <span class='doccomment'>///             *b += *v});</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;   0], 0);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;   1], 1);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;   4], 1);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;   9], 2);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;  16], 3);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;  25], 5);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp;  36], 8);</span>
+    <span class='doccomment'>/// assert_eq!(m[&amp; 144], 144);</span>
+    <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>update_all_mut</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='kw-2'>mut</span> <span class='ident'>f</span>:<span class='ident'>F</span>) <span class='kw'>where</span> <span class='ident'>F</span>:<span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='ident'>K</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>V</span>)
     {<span class='kw'>for</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> (<span class='kw-2'>ref</span> <span class='ident'>k</span>, <span class='kw-2'>ref</span> <span class='kw-2'>mut</span> <span class='ident'>v</span>) <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='number'>0</span> {<span class='ident'>f</span>(<span class='ident'>k</span>,<span class='ident'>v</span>)}}
     

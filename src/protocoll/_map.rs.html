@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="Source to the Rust file `/Users/YK/Documents/5.info_retrieval/protocoll/src/_map.rs`.">
+    <meta name="description" content="Source to the Rust file `_map.rs`.">
     <meta name="keywords" content="rust, rustlang, rust-lang">
 
     <title>_map.rs.html -- source</title>
@@ -331,7 +331,7 @@
 }
 
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>MapMut</span><span class='op'>&lt;</span><span class='ident'>K</span>,<span class='ident'>V</span><span class='op'>&gt;</span> {
-    <span class='doccomment'>/// like [`Map::update`](#method.update) but can be more efficient.</span>
+    <span class='doccomment'>/// like [`Map::update`](trait.Map.html#method.update) but can be more efficient.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
@@ -348,7 +348,7 @@
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>update_mut</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>k</span>:<span class='ident'>K</span>, <span class='ident'>fnil</span>:<span class='ident'>V</span>, <span class='ident'>f</span>:<span class='ident'>F</span>) <span class='kw'>where</span> <span class='ident'>F</span>:<span class='ident'>FnOnce</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>V</span>);
 
-    <span class='doccomment'>/// like [`Map::update_all`](#method.update_all) but can be more efficient.</span>
+    <span class='doccomment'>/// like [`Map::update_all`](trait.Map.html#method.update_all) but can be more efficient.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
@@ -363,7 +363,7 @@
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>update_all_mut</span><span class='op'>&lt;</span><span class='ident'>F</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>f</span>:<span class='ident'>F</span>) <span class='kw'>where</span> <span class='ident'>F</span>:<span class='ident'>FnMut</span>(<span class='kw-2'>&amp;</span><span class='ident'>K</span>, <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>V</span>);
 
-    <span class='doccomment'>/// like [`Map::merge`](#method.merge) but can be more efficient.</span>
+    <span class='doccomment'>/// like [`Map::merge`](trait.Map.html#method.merge) but can be more efficient.</span>
     <span class='doccomment'>///</span>
     <span class='doccomment'>/// # example</span>
     <span class='doccomment'>/// ```</span>
