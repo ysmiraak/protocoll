@@ -456,7 +456,7 @@
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
     <span class='doccomment'>/// let s1:VecSortedSet&lt;_&gt; = vec![1,2,3].into_iter().collect();</span>
     <span class='doccomment'>/// let s2:VecSortedSet&lt;_&gt; = vec![2,3,4].into_iter().collect();</span>
-    <span class='doccomment'>/// assert_eq!((s1.clone() | s2.clone()).view_content(), &amp;[1,2,3,4]);</span>
+    <span class='doccomment'>/// assert_eq!((s1 | s2).view_content(), &amp;[1,2,3,4]);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>bitor</span>(<span class='self'>self</span>, <span class='ident'>other</span>:<span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
@@ -491,7 +491,7 @@
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
     <span class='doccomment'>/// let s1:VecSortedSet&lt;_&gt; = vec![1,2,3].into_iter().collect();</span>
     <span class='doccomment'>/// let s2:VecSortedSet&lt;_&gt; = vec![2,3,4].into_iter().collect();</span>
-    <span class='doccomment'>/// assert_eq!((s1.clone() &amp; s2.clone()).view_content(), &amp;[2,3]);</span>
+    <span class='doccomment'>/// assert_eq!((s1 &amp; s2).view_content(), &amp;[2,3]);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>bitand</span>(<span class='self'>self</span>, <span class='ident'>other</span>:<span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
@@ -522,7 +522,7 @@
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
     <span class='doccomment'>/// let s1:VecSortedSet&lt;_&gt; = vec![1,2,3].into_iter().collect();</span>
     <span class='doccomment'>/// let s2:VecSortedSet&lt;_&gt; = vec![2,3,4].into_iter().collect();</span>
-    <span class='doccomment'>/// assert_eq!((s1.clone() ^ s2.clone()).view_content(), &amp;[1,4]);</span>
+    <span class='doccomment'>/// assert_eq!((s1 ^ s2).view_content(), &amp;[1,4]);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>bitxor</span>(<span class='self'>self</span>, <span class='ident'>other</span>:<span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();
@@ -557,7 +557,7 @@
     <span class='doccomment'>/// use protocoll::set::VecSortedSet;</span>
     <span class='doccomment'>/// let s1:VecSortedSet&lt;_&gt; = vec![1,2,3].into_iter().collect();</span>
     <span class='doccomment'>/// let s2:VecSortedSet&lt;_&gt; = vec![2,3,4].into_iter().collect();</span>
-    <span class='doccomment'>/// assert_eq!((s1.clone() - s2.clone()).view_content(), &amp;[1]);</span>
+    <span class='doccomment'>/// assert_eq!((s1 - s2).view_content(), &amp;[1]);</span>
     <span class='doccomment'>/// ```</span>
     <span class='kw'>fn</span> <span class='ident'>sub</span>(<span class='self'>self</span>, <span class='ident'>other</span>:<span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>VecSortedSet</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> {
         <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>Vec</span>::<span class='ident'>new</span>();

@@ -47,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-652' class='srclink' href='../src/protocoll/src/_seq.rs.html#4-24' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-652' class='srclink' href='../src/protocoll/src/_seq.rs.html#4-31' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait Seq&lt;T&gt; <span class='where'>where Self: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span> {
     fn <a href='#tymethod.fun' class='fnname'>fun</a>&lt;'a&gt;(&amp;'a self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a T&gt; + 'a&gt;;
     fn <a href='#tymethod.inc' class='fnname'>inc</a>(self, i: T) -&gt; Self;
@@ -61,15 +61,22 @@
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
         <h3 id='tymethod.fun' class='method stab '><span id='fun.v' class='invisible'><code>fn <a href='#tymethod.fun' class='fnname'>fun</a>&lt;'a&gt;(&amp;'a self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;<a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;'a T&gt; + 'a&gt;</code></span></h3><div class='docblock'><p>a seq maps from indices to items. O(n) for <code>BinaryHeap</code>.</p>
-</div><h3 id='tymethod.inc' class='method stab '><span id='inc.v' class='invisible'><code>fn <a href='#tymethod.inc' class='fnname'>inc</a>(self, i: T) -&gt; Self</code></span></h3><div class='docblock'><p>adds item <code>i</code>. both <code>Vec</code> and <code>VecDeque</code> grows to the right.</p>
-</div><h3 id='tymethod.dec' class='method stab '><span id='dec.v' class='invisible'><code>fn <a href='#tymethod.dec' class='fnname'>dec</a>(self) -&gt; Self</code></span></h3><div class='docblock'><p>removes an item. for <code>Vec</code> it&#39;s the last one; for <code>VecDeque</code> the first;
+</div><h3 id='tymethod.inc' class='method stab '><span id='inc.v' class='invisible'><code>fn <a href='#tymethod.inc' class='fnname'>inc</a>(self, i: T) -&gt; Self</code></span></h3><div class='docblock'><p>like <code>clojure</code>&#39;s <a href="http://clojuredocs.org/clojure.core/conj"><code>conj</code></a></p>
+
+<p>adds item <code>i</code>. both <code>Vec</code> and <code>VecDeque</code> grows to the right.</p>
+</div><h3 id='tymethod.dec' class='method stab '><span id='dec.v' class='invisible'><code>fn <a href='#tymethod.dec' class='fnname'>dec</a>(self) -&gt; Self</code></span></h3><div class='docblock'><p>like <code>clojure</code>&#39;s <a href="http://clojuredocs.org/clojure.core/pop"><code>pop</code></a> for
+vectors and queues.</p>
+
+<p>removes an item. for <code>Vec</code> it&#39;s the last one; for <code>VecDeque</code> the first;
 for <code>BinaryHeap</code> it&#39;s the greatest one.</p>
 </div><h3 id='tymethod.zero' class='method stab '><span id='zero.v' class='invisible'><code>fn <a href='#tymethod.zero' class='fnname'>zero</a>(self) -&gt; Self</code></span></h3><div class='docblock'><p><code>clear</code>.</p>
 </div><h3 id='tymethod.shrink' class='method stab '><span id='shrink.v' class='invisible'><code>fn <a href='#tymethod.shrink' class='fnname'>shrink</a>(self) -&gt; Self</code></span></h3><div class='docblock'><p><code>shrink_to_fit</code>.</p>
 </div></div>
             <h2 id='provided-methods'>Provided Methods</h2>
             <div class='methods'>
-        <h3 id='method.plus' class='method stab '><span id='plus.v' class='invisible'><code>fn <a href='#method.plus' class='fnname'>plus</a>&lt;I&gt;(self, coll: I) -&gt; Self <span class='where'>where I: <a class='trait' href='https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html' title='core::iter::traits::IntoIterator'>IntoIterator</a>&lt;Item=T&gt;</span></code></span></h3><div class='docblock'><p>pours another collection into this one.</p>
+        <h3 id='method.plus' class='method stab '><span id='plus.v' class='invisible'><code>fn <a href='#method.plus' class='fnname'>plus</a>&lt;I&gt;(self, coll: I) -&gt; Self <span class='where'>where I: <a class='trait' href='https://doc.rust-lang.org/nightly/core/iter/traits/trait.IntoIterator.html' title='core::iter::traits::IntoIterator'>IntoIterator</a>&lt;Item=T&gt;</span></code></span></h3><div class='docblock'><p>like <code>clojure</code>&#39;s <a href="http://clojuredocs.org/clojure.core/into"><code>into</code></a></p>
+
+<p>pours another collection into this one.</p>
 </div></div>
         <h2 id='implementors'>Implementors</h2>
         <ul class='item-list' id='implementors-list'>
