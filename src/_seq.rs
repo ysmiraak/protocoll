@@ -5,21 +5,21 @@ pub trait Seq<T> where Self:Sized {
     /// a seq maps from indices to items. O(n) for `BinaryHeap`.
     fn fun<'a>(&'a self) -> Box<Fn(usize) -> Option<&'a T> + 'a>;
 
-    /// like `clojure`'s [`conj`](http://clojuredocs.org/clojure.core/conj)
-    ///
     /// adds item `i`. both `Vec` and `VecDeque` grows to the right.
+    ///
+    /// like `clojure`'s [`conj`](http://clojuredocs.org/clojure.core/conj).
     fn inc(self, i:T) -> Self;
 
-    /// like `clojure`'s [`pop`](http://clojuredocs.org/clojure.core/pop) for
-    /// vectors and queues.
-    ///
     /// removes an item. for `Vec` it's the last one; for `VecDeque` the first;
     /// for `BinaryHeap` it's the greatest one.
+    ///
+    /// like `clojure`'s [`pop`](http://clojuredocs.org/clojure.core/pop) for
+    /// vectors and queues.
     fn dec(self) -> Self;
 
-    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into)
-    ///
     /// pours another collection into this one.
+    ///
+    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into).
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
     {coll.into_iter().fold(self, Seq::inc)}
 

@@ -4,7 +4,7 @@
 mod _map;
 mod vec_sorted_map;
 
-pub use _map::Map;
+pub use _map::{Map,MapMut};
 pub mod map {
     pub use vec_sorted_map::VecSortedMap;
 }

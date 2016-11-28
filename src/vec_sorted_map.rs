@@ -1,10 +1,11 @@
-use _map::Map;
+use _map::{Map,MapMut};
 use std::borrow::Borrow;
 
-/// an array-map sorted by key. does not support `entry`; see
-/// [`Map::update`](#method.update) for the same
-/// functionality. [`Map::update_in_place`](#method.update_in_place) is **not**
-/// much more efficient than `update` for this data structure.
+/// an array-map sorted by key.
+///
+/// does not support `entry`; see [`Map::update`](#method.update) for the same
+/// functionality. [`Map::update_mut`](#method.update_mut) is **not** much more
+/// efficient than `update` for this data structure.
 #[derive(Default,Clone,PartialEq,Eq,PartialOrd,Ord,Hash)]
 pub struct VecSortedMap<K,V>(Vec<(K,V)>);
 
@@ -95,7 +96,6 @@ impl<K,V> VecSortedMap<K,V> {
     /// this makes up for the (intended) absence of `iter_mut`.
     ///
     /// # example
-    ///
     /// ```
     /// // a somewhat unecessary way to create a mapping from square numbers to
     /// // fibonacci numbers.
@@ -177,14 +177,22 @@ impl<K,V> Map<K,V> for VecSortedMap<K,V> where K:Ord {
                 let l = vec.len();
                 vec.swap(i,l-1)}} self}
 
+    fn update_all<F>(self, mut f:F) -> Self
+        where Self:IntoIterator<Item = (K,V)> + FromIterator<(K, V)>, F:FnMut(&K,V) -> V
+    {VecSortedMap(self.0.into_iter().map(|(k,v)| {let v = f(&k,v); (k,v)}).collect())}
+}
+
+impl<K,V> MapMut<K,V> for VecSortedMap<K,V> where K:Ord {
     fn update_mut<F>(&mut self, k:K, mut fnil:V, f:F) where F:FnOnce(&mut V)
     {match self.0.binary_search_by(|&(ref q, _)| q.borrow().cmp(&k))
      {Ok(i) => f(&mut self.0[i].1), Err(i) => {f(&mut fnil); self.0.insert(i,(k,fnil))}}}
 
-    fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
-    {coll.into_iter().fold
-     (self, |mut m,(k,v)|
-      {match m.0.binary_search_by(|&(ref q, _)| q.cmp(&k))
-       {Ok(i) => f(&mut m.0[i].1, v),
-        Err(i) => m.0.insert(i,(k,v))} m})}
+    fn update_all_mut<F>(&mut self, mut f:F) where F:FnMut(&K, &mut V)
+    {for &mut (ref k, ref mut v) in &mut self.0 {f(k,v)}}
+    
+    fn merge_mut<I,F>(&mut self, coll:I, mut f:F) where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
+    {for (k,v) in coll
+     {match self.0.binary_search_by(|&(ref q, _)| q.cmp(&k))
+      {Ok(i) => f(&mut self.0[i].1, v),
+       Err(i) => self.0.insert(i,(k,v))}}}
 }

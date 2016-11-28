@@ -1,25 +1,26 @@
 use std::collections::{HashMap,hash_map,BTreeMap,btree_map};
 use std::borrow::Borrow;
 use std::hash::Hash;
+use std::iter::FromIterator;
 
 /// basic protocol for maps.
 pub trait Map<K,V> where Self:Sized {
     /// a map maps from keys to values.
     fn fun<'a,Q:?Sized>(&'a self) -> Box<Fn(&Q) -> Option<&'a V> + 'a> where K:Borrow<Q>, Q:Hash+Ord;
 
-    /// like `clojure`'s [`assoc`](http://clojuredocs.org/clojure.core/assoc)
-    ///
     /// adds `v` at `k`.
+    ///
+    /// like `clojure`'s [`assoc`](http://clojuredocs.org/clojure.core/assoc).
     fn inc(self, k:K, v:V) -> Self;
 
-    /// like `clojure`'s [`dissoc`](http://clojuredocs.org/clojure.core/dissoc)
-    ///
     /// removes key `k`.
+    ///
+    /// like `clojure`'s [`dissoc`](http://clojuredocs.org/clojure.core/dissoc).
     fn dec<Q:?Sized>(self, k:&Q) -> Self where K:Borrow<Q>, Q:Hash+Ord;
 
-    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into)
-    ///
     /// pours another collection into this one.
+    ///
+    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into).
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = (K,V)>
     {coll.into_iter().fold(self, |m,(k,v)| Map::inc(m,k,v))}
 
@@ -29,12 +30,11 @@ pub trait Map<K,V> where Self:Sized {
     /// `shrink_to_fit`.
     fn shrink(self) -> Self;
 
-    /// like `clojure`'s [`update`](http://clojuredocs.org/clojure.core/update).
-    ///
     /// updates the value at `k` by `f`.
     ///
-    /// # example
+    /// like `clojure`'s [`update`](http://clojuredocs.org/clojure.core/update).
     ///
+    /// # example
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -44,12 +44,30 @@ pub trait Map<K,V> where Self:Sized {
     /// assert_eq!(6, m[&0]);
     /// assert_eq!(2, m[&1]);
     /// ```
-    fn update<F>(self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V ;
+    fn update<F>(self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V;
 
+    /// updates all values by `f`
+    ///
+    /// # example
+    /// ```
+    /// use protocoll::Map;
+    /// use std::collections::HashMap;
+    /// let m = [0,0,0,1,1,0,0,0].iter().fold
+    ///     (HashMap::new(), |m,&k| Map::update
+    ///      (m, k, |n| 1 + n.unwrap_or(0)))
+    ///     .update_all(|_,v| v + 1);
+    /// assert_eq!(7, m[&0]);
+    /// assert_eq!(3, m[&1]);
+    /// ```
+    fn update_all<F>(self, mut f:F) -> Self
+        where Self:IntoIterator<Item = (K,V)> + FromIterator<(K, V)>, F:FnMut(&K,V) -> V
+    {self.into_iter().map(|(k,v)| {let v = f(&k,v); (k,v)}).collect()}
+
+    /// merges `coll` into this one, resolving conflicts by `f`.
+    ///
     /// like `clojure`'s [`merge-with`](http://clojuredocs.org/clojure.core/merge-with).
     ///
     /// # example
-    ///
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -63,42 +81,56 @@ pub trait Map<K,V> where Self:Sized {
     /// ```
     fn merge<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(V,V) -> V
     {coll.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |opt_u| match opt_u {Some(u) => f(u,v), None => v}))}
+}
 
+pub trait MapMut<K,V> {
     /// like [`Map::update`](#method.update) but can be more efficient.
     ///
     /// # example
-    ///
     /// ```
-    /// use protocoll::Map;
+    /// use protocoll::{Map,MapMut};
     /// use std::collections::HashMap;
     /// let a = [0,0,0,1,1,0,0,0];
     /// let m1 = a.iter().fold
     ///     (HashMap::new(), |m,&k| Map::update
     ///      (m, k, |n| 1 + n.unwrap_or(0)));
     /// let m2 = a.iter().fold
-    ///     (HashMap::new(), |mut m,&k|
+    ///     (HashMap::new(), |mut m, &k|
     ///      {m.update_mut(k, 0, |n| *n += 1); m});
     /// assert_eq!(m1,m2);
     /// ```
     fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V);
 
-    /// like `Map::merge` but can be more efficient.
+    /// like [`Map::update_all`](#method.update_all) but can be more efficient.
     ///
     /// # example
-    ///
     /// ```
-    /// use protocoll::Map;
+    /// use protocoll::MapMut;
     /// use std::collections::HashMap;
-    /// use std::ops::Add;
-    /// let a = [0,0,0,1,1,0,0,0];
-    /// let m = a.iter().fold
-    ///     (HashMap::new(), |m,&k| Map::update_in_place
-    ///      (m, k, 0, |n| *n += 1));
-    /// let m = Map::merge_in_place(m.clone(), m, |u,v| *u += v);
-    /// assert_eq!(12, m[&0]);
-    /// assert_eq!(4, m[&1]);
+    /// let mut m = [0,0,0,1,1,0,0,0].iter().fold
+    ///     (HashMap::new(), |mut m, &k|
+    ///      {m.update_mut(k, 0, |n| *n += 1); m});
+    /// m.update_all_mut(|_,v| *v += 1);
+    /// assert_eq!(7, m[&0]);
+    /// assert_eq!(3, m[&1]);
     /// ```
-    fn merge_in_place<I,F>(self, coll:I, f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V);
+    fn update_all_mut<F>(&mut self, f:F) where F:FnMut(&K, &mut V);
+
+    /// like [`Map::merge`](#method.merge) but can be more efficient.
+    ///
+    /// # example
+    /// ```
+    /// use protocoll::MapMut;
+    /// use std::collections::HashMap;
+    /// let m1 = [0,0,0,1,1,0,0,0].iter().fold
+    ///     (HashMap::new(), |mut m, &k|
+    ///      {m.update_mut(k, 0, |n| *n += 1); m});
+    /// let mut m2 = m1.clone();
+    /// m2.merge_mut(m1, |u,v| *u += v);
+    /// assert_eq!(12, m2[&0]);
+    /// assert_eq!(4, m2[&1]);
+    /// ```
+    fn merge_mut<I,F>(&mut self, coll:I, f:F) where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V);
 }
 
 impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
@@ -119,17 +151,20 @@ impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
 
     fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
     {let v = f(self.remove(&k)); Map::inc(self,k,v)}
+}
 
+impl<K,V> MapMut<K,V> for HashMap<K,V> where K:Hash+Eq {
     fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V)
     {f(self.entry(k).or_insert(fnil))}
 
-    fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
-    {coll.into_iter().fold
-     (self, |mut m,(k,v)|
-      {match m.entry(k)
-       {hash_map::Entry::Occupied(e) => f(e.into_mut(),v),
-        hash_map::Entry::Vacant(e) => {e.insert(v);}} m})}
-
+    fn update_all_mut<F>(&mut self, mut f:F) where F:FnMut(&K, &mut V)
+    {for (k,v) in self {f(k,v)}}
+    
+    fn merge_mut<I,F>(&mut self, coll:I, mut f:F) where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
+    {for (k,v) in coll
+     {match self.entry(k)
+      {hash_map::Entry::Occupied(e) => f(e.into_mut(),v),
+       hash_map::Entry::Vacant(e) => {e.insert(v);}}}}
 }
 
 impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
@@ -150,14 +185,18 @@ impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
 
     fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
     {let v = f(self.remove(&k)); Map::inc(self,k,v)}
+}
 
+impl<K,V> MapMut<K,V> for BTreeMap<K,V> where K:Ord {
     fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V)
     {f(self.entry(k).or_insert(fnil))}
 
-    fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
-    {coll.into_iter().fold
-     (self, |mut m,(k,v)|
-      {match m.entry(k)
-       {btree_map::Entry::Occupied(e) => f(e.into_mut(),v),
-        btree_map::Entry::Vacant(e) => {e.insert(v);}} m})}
+    fn update_all_mut<F>(&mut self, mut f:F) where F:FnMut(&K, &mut V)
+    {for (k,v) in self {f(k,v)}}
+    
+    fn merge_mut<I,F>(&mut self, coll:I, mut f:F) where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
+    {for (k,v) in coll
+     {match self.entry(k)
+      {btree_map::Entry::Occupied(e) => f(e.into_mut(),v),
+       btree_map::Entry::Vacant(e) => {e.insert(v);}}}}
 }

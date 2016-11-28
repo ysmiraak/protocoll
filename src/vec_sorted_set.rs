@@ -136,7 +136,8 @@ use std::cmp::Ordering::{Less,Equal,Greater};
 
 impl<T> BitOr<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     type Output = VecSortedSet<T>;
-    /// union
+    /// union.
+    ///
     /// # example
     /// ```
     /// use protocoll::set::VecSortedSet;
@@ -171,7 +172,8 @@ impl<T> BitOr<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
 
 impl<T> BitAnd<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     type Output = VecSortedSet<T>;
-    /// intersection
+    /// intersection.
+    ///
     /// # example
     /// ```
     /// use protocoll::set::VecSortedSet;
@@ -202,7 +204,8 @@ impl<T> BitAnd<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
 
 impl<T> BitXor<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     type Output = VecSortedSet<T>;
-    /// symmetric difference
+    /// symmetric difference.
+    ///
     /// # example
     /// ```
     /// use protocoll::set::VecSortedSet;
@@ -237,7 +240,8 @@ impl<T> BitXor<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
 
 impl<T> Sub<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     type Output = VecSortedSet<T>;
-    /// difference
+    /// difference.
+    ///
     /// # example
     /// ```
     /// use protocoll::set::VecSortedSet;
