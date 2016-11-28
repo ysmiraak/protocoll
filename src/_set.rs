@@ -7,12 +7,18 @@ pub trait Set<T> where Self:Sized {
     /// a set maps from items to themselves.
     fn fun<'a,Q:?Sized>(&'a self) -> Box<Fn(&Q) -> Option<&'a T> + 'a> where T:Borrow<Q>, Q:Hash+Ord;
 
+    /// like `clojure`'s [`conj`](http://clojuredocs.org/clojure.core/conj)
+    ///
     /// adds item `i`.
     fn inc(self, i:T) -> Self;
 
+    /// like `clojure`'s [`disj`](http://clojuredocs.org/clojure.core/disj)
+    ///
     /// removes item `i`.
     fn dec<Q:?Sized>(self, i:&Q) -> Self where T:Borrow<Q>, Q:Hash+Ord;
 
+    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into)
+    ///
     /// pours another collection into this one.
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = T>
     {coll.into_iter().fold(self, Set::inc)}

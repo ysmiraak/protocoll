@@ -7,12 +7,18 @@ pub trait Map<K,V> where Self:Sized {
     /// a map maps from keys to values.
     fn fun<'a,Q:?Sized>(&'a self) -> Box<Fn(&Q) -> Option<&'a V> + 'a> where K:Borrow<Q>, Q:Hash+Ord;
 
+    /// like `clojure`'s [`assoc`](http://clojuredocs.org/clojure.core/assoc)
+    ///
     /// adds `v` at `k`.
     fn inc(self, k:K, v:V) -> Self;
 
+    /// like `clojure`'s [`dissoc`](http://clojuredocs.org/clojure.core/dissoc)
+    ///
     /// removes key `k`.
     fn dec<Q:?Sized>(self, k:&Q) -> Self where K:Borrow<Q>, Q:Hash+Ord;
 
+    /// like `clojure`'s [`into`](http://clojuredocs.org/clojure.core/into)
+    ///
     /// pours another collection into this one.
     fn plus<I>(self, coll:I) -> Self where I:IntoIterator<Item = (K,V)>
     {coll.into_iter().fold(self, |m,(k,v)| Map::inc(m,k,v))}
@@ -23,8 +29,12 @@ pub trait Map<K,V> where Self:Sized {
     /// `shrink_to_fit`.
     fn shrink(self) -> Self;
 
-    /// like clojure's [update](http://clojuredocs.org/clojure.core/update).
+    /// like `clojure`'s [`update`](http://clojuredocs.org/clojure.core/update).
+    ///
+    /// updates the value at `k` by `f`.
+    ///
     /// # example
+    ///
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -36,8 +46,10 @@ pub trait Map<K,V> where Self:Sized {
     /// ```
     fn update<F>(self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V ;
 
-    /// like clojure's [merge-with](http://clojuredocs.org/clojure.core/merge-with).
+    /// like `clojure`'s [`merge-with`](http://clojuredocs.org/clojure.core/merge-with).
+    ///
     /// # example
+    ///
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -50,10 +62,12 @@ pub trait Map<K,V> where Self:Sized {
     /// assert_eq!(4, m[&1]);
     /// ```
     fn merge<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(V,V) -> V
-    {coll.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |opt_u| match opt_u {Some(u) => f(u,v), None => v }))}
+    {coll.into_iter().fold(self, |m,(k,v)| Map::update(m, k, |opt_u| match opt_u {Some(u) => f(u,v), None => v}))}
 
-    /// like `Map::update` but can be more efficient.
+    /// like [`Map::update`](#method.update) but can be more efficient.
+    ///
     /// # example
+    ///
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -62,14 +76,16 @@ pub trait Map<K,V> where Self:Sized {
     ///     (HashMap::new(), |m,&k| Map::update
     ///      (m, k, |n| 1 + n.unwrap_or(0)));
     /// let m2 = a.iter().fold
-    ///     (HashMap::new(), |m,&k| Map::update_in_place
-    ///      (m, k, 0, |n| *n += 1));
+    ///     (HashMap::new(), |mut m,&k|
+    ///      {m.update_mut(k, 0, |n| *n += 1); m});
     /// assert_eq!(m1,m2);
     /// ```
-    fn update_in_place<F>(self, k:K, fnil:V, f:F) -> Self where F:FnOnce(&mut V);
+    fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V);
 
-    /// like `Map::merge` but more efficient.
+    /// like `Map::merge` but can be more efficient.
+    ///
     /// # example
+    ///
     /// ```
     /// use protocoll::Map;
     /// use std::collections::HashMap;
@@ -104,8 +120,8 @@ impl<K,V> Map<K,V> for HashMap<K,V> where K:Hash+Eq {
     fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
     {let v = f(self.remove(&k)); Map::inc(self,k,v)}
 
-    fn update_in_place<F>(mut self, k:K, fnil:V, f:F) -> Self where F:FnOnce(&mut V)
-    {f(self.entry(k).or_insert(fnil)); self}
+    fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V)
+    {f(self.entry(k).or_insert(fnil))}
 
     fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
     {coll.into_iter().fold
@@ -135,8 +151,8 @@ impl<K,V> Map<K,V> for BTreeMap<K,V> where K:Ord {
     fn update<F>(mut self, k:K, f:F) -> Self where F:FnOnce(Option<V>) -> V
     {let v = f(self.remove(&k)); Map::inc(self,k,v)}
 
-    fn update_in_place<F>(mut self, k:K, fnil:V, f:F) -> Self where F:FnOnce(&mut V)
-    {f(self.entry(k).or_insert(fnil)); self}
+    fn update_mut<F>(&mut self, k:K, fnil:V, f:F) where F:FnOnce(&mut V)
+    {f(self.entry(k).or_insert(fnil))}
 
     fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
     {coll.into_iter().fold

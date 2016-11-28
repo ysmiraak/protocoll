@@ -92,8 +92,10 @@ impl<K,V> VecSortedMap<K,V> {
     pub fn is_empty(&self) -> bool
     {self.0.is_empty()}
 
-    /// this makes up for the (intentional) absence of `iter_mut`.
+    /// this makes up for the (intended) absence of `iter_mut`.
+    ///
     /// # example
+    ///
     /// ```
     /// // a somewhat unecessary way to create a mapping from square numbers to
     /// // fibonacci numbers.
@@ -175,9 +177,9 @@ impl<K,V> Map<K,V> for VecSortedMap<K,V> where K:Ord {
                 let l = vec.len();
                 vec.swap(i,l-1)}} self}
 
-    fn update_in_place<F>(mut self, k:K, mut fnil:V, f:F) -> Self where F:FnOnce(&mut V)
+    fn update_mut<F>(&mut self, k:K, mut fnil:V, f:F) where F:FnOnce(&mut V)
     {match self.0.binary_search_by(|&(ref q, _)| q.borrow().cmp(&k))
-     {Ok(i) => f(&mut self.0[i].1), Err(i) => {f(&mut fnil); self.0.insert(i,(k,fnil))}} self}
+     {Ok(i) => f(&mut self.0[i].1), Err(i) => {f(&mut fnil); self.0.insert(i,(k,fnil))}}}
 
     fn merge_in_place<I,F>(self, coll:I, mut f:F) -> Self where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
     {coll.into_iter().fold

@@ -142,7 +142,7 @@ impl<T> BitOr<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     /// use protocoll::set::VecSortedSet;
     /// let s1:VecSortedSet<_> = vec![1,2,3].into_iter().collect();
     /// let s2:VecSortedSet<_> = vec![2,3,4].into_iter().collect();
-    /// assert_eq!((s1.clone() | s2.clone()).view_content(), &[1,2,3,4]);
+    /// assert_eq!((s1 | s2).view_content(), &[1,2,3,4]);
     /// ```
     fn bitor(self, other:VecSortedSet<T>) -> VecSortedSet<T> {
         let mut vec = Vec::new();
@@ -177,7 +177,7 @@ impl<T> BitAnd<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     /// use protocoll::set::VecSortedSet;
     /// let s1:VecSortedSet<_> = vec![1,2,3].into_iter().collect();
     /// let s2:VecSortedSet<_> = vec![2,3,4].into_iter().collect();
-    /// assert_eq!((s1.clone() & s2.clone()).view_content(), &[2,3]);
+    /// assert_eq!((s1 & s2).view_content(), &[2,3]);
     /// ```
     fn bitand(self, other:VecSortedSet<T>) -> VecSortedSet<T> {
         let mut vec = Vec::new();
@@ -208,7 +208,7 @@ impl<T> BitXor<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     /// use protocoll::set::VecSortedSet;
     /// let s1:VecSortedSet<_> = vec![1,2,3].into_iter().collect();
     /// let s2:VecSortedSet<_> = vec![2,3,4].into_iter().collect();
-    /// assert_eq!((s1.clone() ^ s2.clone()).view_content(), &[1,4]);
+    /// assert_eq!((s1 ^ s2).view_content(), &[1,4]);
     /// ```
     fn bitxor(self, other:VecSortedSet<T>) -> VecSortedSet<T> {
         let mut vec = Vec::new();
@@ -243,7 +243,7 @@ impl<T> Sub<VecSortedSet<T>> for VecSortedSet<T> where T:Ord {
     /// use protocoll::set::VecSortedSet;
     /// let s1:VecSortedSet<_> = vec![1,2,3].into_iter().collect();
     /// let s2:VecSortedSet<_> = vec![2,3,4].into_iter().collect();
-    /// assert_eq!((s1.clone() - s2.clone()).view_content(), &[1]);
+    /// assert_eq!((s1 - s2).view_content(), &[1]);
     /// ```
     fn sub(self, other:VecSortedSet<T>) -> VecSortedSet<T> {
         let mut vec = Vec::new();
