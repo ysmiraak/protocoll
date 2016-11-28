@@ -1,1 +1,1 @@
-initSidebarItems({"mod":[["map",""],["set",""]],"trait":[["Map","basic protocol for maps."],["Seq","basic protocol for seqs."],["Set","basic protocol for sets."],["Str","basic protocol for strs;"]]});
+initSidebarItems({"mod":[["map",""],["set",""]],"trait":[["Map","basic protocol for maps."],["MapMut",""],["Seq","basic protocol for seqs."],["Set","basic protocol for sets."],["Str","basic protocol for strs;"]]});
