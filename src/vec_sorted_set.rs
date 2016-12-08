@@ -374,12 +374,14 @@ impl<'a,'b,T> BitXor<&'b VecSortedSet<T>> for &'a VecSortedSet<T> where T:Ord+Cl
     {self.symmetric_difference(other).cloned().collect()}
 }
 
-/// stolen from BTreeSet
+// stolen from BTreeSet, from here downward.
 fn cmp_opt<T:Ord>(x:Option<&T>,y:Option<&T>,short:Ordering,long:Ordering) -> Ordering
 {match (x, y) {(None,_) => short, (_,None) => long, (Some(x1),Some(y1)) => x1.cmp(y1)}}
+
 #[derive(Clone)]
 pub struct Union<'a,T:'a>
 {this:Peekable<Iter<'a,T>>,that:Peekable<Iter<'a,T>>}
+
 impl<'a,T> Iterator for Union<'a,T> where T:Ord
 {type Item = &'a T;
  fn next(&mut self) -> Option<&'a T>
@@ -389,9 +391,11 @@ impl<'a,T> Iterator for Union<'a,T> where T:Ord
          Greater => return self.that.next()}}}
  fn size_hint(&self) -> (usize,Option<usize>)
  {let a = self.this.len(); let b = self.that.len(); (max(a,b),Some(a+b))}}
+
 #[derive(Clone)]
 pub struct Intersection<'a,T:'a>
 {this:Peekable<Iter<'a,T>>,that:Peekable<Iter<'a,T>>}
+
 impl<'a,T> Iterator for Intersection<'a,T> where T:Ord
 {type Item = &'a T;
  fn next(&mut self) -> Option<&'a T>
@@ -405,9 +409,11 @@ impl<'a,T> Iterator for Intersection<'a,T> where T:Ord
          Greater => {self.that.next();}}}}
  fn size_hint(&self) -> (usize,Option<usize>)
  {(0,Some(min(self.this.len(),self.that.len())))}}
+
 #[derive(Clone)]
 pub struct Difference<'a,T:'a>
 {this:Peekable<Iter<'a,T>>,that:Peekable<Iter<'a,T>>}
+
 impl<'a,T> Iterator for Difference<'a,T> where T:Ord
 {type Item = &'a T;
  fn next(&mut self) -> Option<&'a T>
@@ -417,9 +423,11 @@ impl<'a,T> Iterator for Difference<'a,T> where T:Ord
          Greater => {self.that.next();}}}}
  fn size_hint(&self) -> (usize,Option<usize>)
  {let a = self.this.len(); let b = self.that.len(); (a.saturating_sub(b),Some(a))}}
+
 #[derive(Clone)]
 pub struct SymmetricDifference<'a,T:'a>
 {this:Peekable<Iter<'a,T>>,that:Peekable<Iter<'a,T>>}
+
 impl<'a,T> Iterator for SymmetricDifference<'a,T> where T:Ord
 {type Item = &'a T;
  fn next(&mut self) -> Option<&'a T>
