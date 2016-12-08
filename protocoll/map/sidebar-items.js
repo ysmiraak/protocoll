@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["VecSortedMap","an array-map sorted by key."]]});
+initSidebarItems({"struct":[["VecSortedMap","an array-map sorted by key. very efficient for small maps."]]});

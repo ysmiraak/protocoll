@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["VecSortedSet","an array-set."]]});
+initSidebarItems({"struct":[["VecSortedSet","an array-set. very efficient for small sets."]]});
