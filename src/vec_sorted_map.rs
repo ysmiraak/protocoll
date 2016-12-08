@@ -1,7 +1,16 @@
 use _map::{Map,MapMut};
 use std::borrow::Borrow;
+use std::slice::{Iter};
+use std::vec::IntoIter;
+use std::iter::FromIterator;
+use std::ops::Index;
+use std::fmt::{Debug,Formatter,Result};
 
-/// an array-map sorted by key.
+/// an array-map sorted by key. very efficient for small maps.
+///
+/// for explanations about the methods, see
+/// [`BTreeMap`](https://doc.rust-lang.org/nightly/std/collections/struct.BTreeMap.html)
+/// and [`Vec`](https://doc.rust-lang.org/std/vec/struct.Vec.html).
 ///
 /// does not support `entry`; see [`Map::update`](#method.update) for the same
 /// functionality. [`MapMut`](../trait.MapMut.html) functions are **not** much more
@@ -13,14 +22,14 @@ impl<K,V> VecSortedMap<K,V> where K:Ord {
     pub fn new() -> Self
     {VecSortedMap(Vec::new())}
 
-    pub fn with_capacity(c:usize) -> Self
-    {VecSortedMap(Vec::with_capacity(c))}
+    pub fn with_capacity(n:usize) -> Self
+    {VecSortedMap(Vec::with_capacity(n))}
 
     pub fn capacity(&self) -> usize
     {self.0.capacity()}
 
-    pub fn reserve(&mut self, c:usize)
-    {self.0.reserve(c)}
+    pub fn reserve(&mut self, n:usize)
+    {self.0.reserve(n)}
 
     pub fn shrink_to_fit(&mut self)
     {self.0.shrink_to_fit()}
@@ -63,17 +72,22 @@ impl<K,V> VecSortedMap<K,V> where K:Ord {
     pub fn append(&mut self, other:&mut VecSortedMap<K,V>)
     {self.0.append(&mut other.0)}
 
-    // todo consider porting in &mut methods from vec
-    // fn pop(&mut self) -> Option<T>
-    // fn truncate(&mut self, len: usize)
-    // fn retain<F>(&mut self, f: F) where F: FnMut(&T) -> bool
-    // fn drain<R>(&mut self, range: R) -> Drain<T> where R: RangeArgument<usize>
-    // fn split_off(&mut self, at: usize) -> Vec<T>
-    // fn resize(&mut self, new_len: usize, value: T)
-    // fn dedup(&mut self)
+    pub fn reserve_exact(&mut self, additional:usize)
+    {self.0.reserve_exact(additional)}
+
+    pub fn pop(&mut self) -> Option<(K,V)>
+    {self.0.pop()}
+
+    pub fn truncate(&mut self, len:usize)
+    {self.0.truncate(len)}
+
+    pub fn retain<F>(&mut self, f:F) where F:FnMut(&(K,V)) -> bool
+    {self.0.retain(f)}
+
+    pub fn split_off(&mut self, at:usize) -> VecSortedMap<K,V>
+    {VecSortedMap(self.0.split_off(at))}
 }
 
-use std::slice::{Iter};
 impl<K,V> VecSortedMap<K,V> {
     /// a view for the underlying vec. `&self` methods for `Vec` such as `get`
     /// and `split` can be accessed through this.
@@ -94,7 +108,6 @@ impl<K,V> VecSortedMap<K,V> {
     {self.0.is_empty()}
 }
 
-use std::vec::IntoIter;
 impl<K,V> IntoIterator for VecSortedMap<K,V>
 {type Item = (K,V); type IntoIter = IntoIter<(K,V)>;
  fn into_iter(self) -> IntoIter<(K,V)> {self.0.into_iter()}}
@@ -111,16 +124,13 @@ impl<'a,K,V> Extend<(&'a K, &'a V)> for VecSortedMap<K,V> where K:Ord+Copy, V:Co
 {fn extend<I>(&mut self, iter:I) where I:IntoIterator<Item = (&'a K, &'a V)>
  {self.extend(iter.into_iter().map(|(&key,&value)| (key,value)));}}
 
-use std::iter::FromIterator;
 impl<K,V> FromIterator<(K,V)> for VecSortedMap<K,V> where K:Ord
 {fn from_iter<I>(iter:I) -> VecSortedMap<K,V> where I:IntoIterator<Item = (K,V)>
  {Map::plus(VecSortedMap::new(),iter)}}
 
-use std::ops::Index;
 impl<'a,K,Q:?Sized,V> Index<&'a Q> for VecSortedMap<K,V> where K:Ord, K:Borrow<Q>, Q:Ord
 {type Output = V; fn index(&self, k:&Q) -> &V {self.get(k).expect("no entry found for key")}}
 
-use std::fmt::{Debug,Formatter,Result};
 impl<K,V> Debug for VecSortedMap<K,V> where K:Ord+Debug, V:Debug
 {fn fmt(&self, fmt: &mut Formatter) -> Result
  {fmt.debug_map().entries(self.0.iter().map(|&(ref k, ref v)| (k,v))).finish()}}
@@ -187,7 +197,7 @@ impl<K,V> MapMut<K,V> for VecSortedMap<K,V> where K:Ord {
     /// ```
     fn update_all_mut<F>(&mut self, mut f:F) where F:FnMut(&K, &mut V)
     {for &mut (ref k, ref mut v) in &mut self.0 {f(k,v)}}
-    
+
     fn merge_mut<I,F>(&mut self, coll:I, mut f:F) where I:IntoIterator<Item = (K,V)>, F:FnMut(&mut V, V)
     {for (k,v) in coll
      {match self.0.binary_search_by(|&(ref q, _)| q.cmp(&k))
