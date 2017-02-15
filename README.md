@@ -23,5 +23,3 @@ new value of the same type to replace the old one without first removing the
 entry and then re-inserting the entry. on the other hand, the abominations can
 just mutate the value in place. so if you know how to temporarily move out a
 value without `rust` complaining, please let me know :)
-
-the library is currently experimental and extremely unstable.

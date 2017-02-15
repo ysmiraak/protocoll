@@ -91,7 +91,7 @@ impl<K,V> VecSortedMap<K,V> where K:Ord {
 impl<K,V> VecSortedMap<K,V> {
     /// a view for the underlying vec. `&self` methods for `Vec` such as `get`
     /// and `split` can be accessed through this.
-    pub fn view_content<'a>(&'a self) -> &'a Vec<(K,V)>
+    pub fn view_content<'a>(&'a self) -> &'a [(K,V)]
     {&self.0}
 
     /// iterate over the underlying vec. note: iterator element type is **not**

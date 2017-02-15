@@ -117,7 +117,7 @@ impl<T> VecSortedSet<T> where T:Ord {
 impl<T> VecSortedSet<T> {
     /// a view for the underlying vec. `&self` methods for `Vec` such as `get`
     /// and `split` can be accessed through this.
-    pub fn view_content<'a>(&'a self) -> &'a Vec<T>
+    pub fn view_content<'a>(&'a self) -> &'a [T]
     {&self.0}
 
     /// iterate over the underlying vec.
